@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!--<category label="Login">
+        <setting label="Username:" type="text"   id="username" default=""/>
+        <setting label="Password:" type="text"   id="password" option="hidden"  enable="!eq(-1,)" default=""/>
+    </category>--->
+	<category label="General">
+		<setting label="Movie Folder:" type="folder" id="movie_folder" source="auto" option="writeable"/>
+		<setting label="Show Folder:" type="folder" id="show_folder" source="auto" option="writeable"/>
+		<setting label="Clear Database" type="bool" id="clear_database" default="false"/>
+		<setting label="Action" type="labelenum" id="action" values="links|play"/>
+	</category>
+</settings>
