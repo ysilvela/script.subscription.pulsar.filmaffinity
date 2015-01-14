@@ -13,6 +13,7 @@ class Settings:
         self.icon = self.settings.getAddonInfo('icon')
         self.name_provider = self.settings.getAddonInfo('name')  # gets name
         self.name_provider = re.sub('.COLOR (.*?)]', '', self.name_provider.replace('[/COLOR]', ''))
+        self.language = self.settings.getSetting('language')
         self.movie_folder = ''
         self.show_folder = ''
         while self.movie_folder =='' and self.show_folder == '':
