@@ -23,7 +23,8 @@ class Settings:
         self.clear_database = self.settings.getSetting('clear_database')
         if self.clear_database == 'true':
             path = xbmc.translatePath('special://temp')
-            os.remove((path + 'pulsar-subscription.db'))
+            if os.path.exists(path + 'pulsar-subscription-data.db'):
+                os.remove((path + 'pulsar-subscription-data.db'))
             self.settings.setSetting('clear_database', 'false')
         self.dialog = xbmcgui.Dialog()
 
@@ -143,11 +144,11 @@ class TV_Show_code():
         for item in data['items']:
             seasons.append(int(item['label'].replace('Season ','').replace('Specials', '0')))
         seasons.sort()
-        episodes = []
+        episodes = {}
         for season in seasons:
             browser.open('http://localhost:65251/show/%s/season/%s/episodes' % (self.code, season))
             data = json.loads(browser.content)
-            episodes.append(len(data['items']))
+            episodes[season] = len(data['items'])
         if len(seasons) > 0:
             self.first_season = seasons[0]
             self.last_season = seasons[-1]
@@ -213,7 +214,7 @@ def integration(listing, ID, type_list, folder, silence=False):
             pDialog = xbmcgui.DialogProgress()
             if not silence: pDialog.create('Pulsar list integration', 'Creating the .strm files')
             path = xbmc.translatePath('special://temp')
-            database = shelve.open(path + 'pulsar-subscription.db')
+            database = shelve.open(path + 'pulsar-subscription-data.db')
             cont = 0
             directory = ''
             for cm, item in enumerate(listing):
@@ -225,39 +226,48 @@ def integration(listing, ID, type_list, folder, silence=False):
                     data = {}
                     if len(ID)> 0:
                         data['ID'] = ID[cm]
+                        if type_list == 'SHOW':
+                            tv_show = TV_Show_code(ID[cm])
+                            data['first_season'] = tv_show.first_season
+                            data['last_season'] = tv_show.last_season
+                            data['last_episode'] = tv_show.last_episode
                     else:
-                        movie = Movie(item)  # name of the movie with (year) format: Frozen (2013)
-                        data['ID'] = movie.code  # search the IMDB id
+                        if type_list == 'MOVIE':
+                            movie = Movie(item)  # name of the movie with (year) format: Frozen (2013)
+                            data['ID'] = movie.code  # search the IMDB id
+                        elif type_list == 'SHOW':
+                            tv_show = TV_Show(item)
+                            data['ID'] = tv_show.code
+                            data['first_season'] = tv_show.first_season
+                            data['last_season'] = tv_show.last_season
+                            data['last_episode'] = tv_show.last_episode
                     data['type'] = type_list
                     data['season'] = 0
-                    data['episode'] = 1
-                if type_list == 'MOVIE' and data['type'] == 'MOVIE' and data['episode'] == 1:  # add movies
+                    data['episode'] = 0
+                if type_list == 'MOVIE' and data['type'] == 'MOVIE' and data['episode'] == 0:  # add movies
                     cont += 1
                     directory = folder
                     link = 'plugin://plugin.video.pulsar/movie/%s/%s' % (data['ID'], action)
                     with open("%s%s.strm" % (directory, item), "w") as text_file:  # create .strm
                         text_file.write(link)
-                    data['episode'] = 0
+                    data['episode'] = 1
                     if not silence: pDialog.update(int(float(cm) / total * 100), 'Creating %s%s.strm...' % (directory, item))
                     xbmc.log('%s%s.strm added' % (directory, item), xbmc.LOGINFO)
                 elif type_list == 'SHOW' and data['type'] == 'SHOW':  # add shows
                     directory = folder + item + folder[-1]
                     if not os.path.exists(directory):
                         os.makedirs(directory)
-                    if len(ID) > 0:
-                        tv_show = TV_Show_code(ID[cm])
-                    else:
-                        tv_show = TV_Show(item)
-                    for season in range(max(data['season'], tv_show.first_season), tv_show.last_season):
-                        for episode in range(data['episode'], tv_show.last_episode[season]):
+                    for season in range(max(data['season'], data['first_season']), data['last_season'] + 1):
+                        for episode in range(data['episode'] + 1, data['last_episode'][season] + 1):
                             cont += 1
-                            link = 'plugin://plugin.video.pulsar/show/%s/season/%s/episode/%s/%s' % (tv_show.code, season, episode, action)
+                            link = 'plugin://plugin.video.pulsar/show/%s/season/%s/episode/%s/%s' % (data['ID'], season, episode, action)
+                            print link
                             if not silence: pDialog.update(int(float(cm) / total * 100), "%s%s S%02dE%02d.strm" % (directory, item, season, episode))
                             with open("%s%s S%02dE%02d.strm" % (directory, item, season, episode), "w") as text_file:  # create .strm
                                 text_file.write(link)
                         data['episode'] = 1 # change to new season and reset the episode to 1
-                    data['season'] = tv_show.last_season
-                    data['episode'] = tv_show.last_episode[tv_show.last_season]
+                    data['season'] = data['last_season']
+                    data['episode'] = data['last_episode'][data['last_season']]
                     if not silence: pDialog.update(int(float(cm) / total * 100), 'Creating %s%s.strm...' % (directory, item))
                     xbmc.log('%s%s.strm added' % (directory, item), xbmc.LOGINFO)
                 # update database
@@ -275,7 +285,11 @@ def integration(listing, ID, type_list, folder, silence=False):
                 else:
                     dialog.notification('Subscription Pulsar list', '%s Files added.' % cont, xbmcgui.NOTIFICATION_INFO, 1000)
             else:
+                xbmc.log('[service.subscription] No new files')
                 if not silence:
                     dialog.ok('Integration is done!!', 'Files already added.  It may you need to clear the database')
+                else:
+                    dialog.notification('Subscription Pulsar list', 'No New Files', xbmcgui.NOTIFICATION_INFO, 1000)
     else:
+        xbmc.log('[service.subscription] Empty List')
         if not silence: dialog.ok('Empty List!!', 'Try another list number, please')
