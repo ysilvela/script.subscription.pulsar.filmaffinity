@@ -5,7 +5,6 @@
         <setting label="Password:" type="text"   id="password" option="hidden"  enable="!eq(-1,)" default=""/>
     </category>--->
 	<category label="General">
-	        <setting label="Language:" type="labelenum" id="language" values="en|de|es|fr|it|pt" default="es"/>
 		<setting label="Movie Folder:" type="folder" id="movie_folder" source="auto" option="writeable"/>
 		<setting label="TV Show Folder:" type="folder" id="show_folder" source="auto" option="writeable"/>
 		<setting label="Clear Database" type="bool" id="clear_database" default="false"/>

@@ -7,10 +7,7 @@ settings = subscription.Settings()
 # define the browser
 browser = subscription.Browser()
 
-if self.language == "es":
-    url_search = "http://www.filmaffinity.com/es/countcat.php?id=new_th_es"
-else:    
- url_search = "http://www.filmaffinity.com/en/topcat_DVD_VID_US.html"
+url_search = "http://www.filmaffinity.com/en/topcat_DVD_VID_US.html"
 listing = []
 ID = []  # IMDB_ID or thetvdb ID
 if browser.open(url_search):

@@ -13,7 +13,6 @@ class Settings:
         self.icon = self.settings.getAddonInfo('icon')
         self.name_provider = self.settings.getAddonInfo('name')  # gets name
         self.name_provider = re.sub('.COLOR (.*?)]', '', self.name_provider.replace('[/COLOR]', ''))
-        self.language = self.settings.getSetting('language')
         self.movie_folder = ''
         self.show_folder = ''
         while self.movie_folder =='' and self.show_folder == '':
@@ -99,7 +98,7 @@ def translator(imdb_id, language):
         if title == original_title:
             title += ' ' + keywords[language]
     else:
-        title = 'Communication lost with themoviedb.org'
+        title = 'Pas de communication avec le themoviedb.org'
     return title.rstrip()
 
 
