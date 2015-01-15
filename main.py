@@ -1,4 +1,6 @@
 # coding: utf-8
+import xbmcaddon
+import xbmc
 import re
 import subscription
 
@@ -7,10 +9,12 @@ settings = subscription.Settings()
 # define the browser
 browser = subscription.Browser()
 
-if self.language == "es":
+if xbmcaddon.Addon().getSetting('language') == "es":
     url_search = "http://www.filmaffinity.com/es/countcat.php?id=new_th_es"
+    xbmc.log('[service.subscription] Using language selection')
 else:
     url_search = "http://www.filmaffinity.com/en/topcat_DVD_VID_US.html"
+    xbmc.log('[service.subscription] Using default language selection')
 listing = []
 ID = []  # IMDB_ID or thetvdb ID
 if browser.open(url_search):

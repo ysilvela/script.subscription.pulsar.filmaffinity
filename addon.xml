@@ -11,12 +11,12 @@
 		<summary lang="en">Pulsar FilmAffinity list subscription</summary>
 		<summary lang="es">Lista de subscripcion a FilmAffinity para Pulsar</summary>
 		<description lang="en">This script creates .strm files from personalize list to be play for pulsar from the local library</description>
-		<description lang="es">Este script crea los archivos .strm desde una lista personalizada para ser vistos por Pulsar desde la libraria local a partir de FilmAffinity.</description>
+		<description lang="es">Este script crea los archivos .strm desde una lista personalizada para ser vistos por Pulsar desde la libraria local a partir de FilmAffinity.[CR]La idea de este addon es principalmente cargar las peliculas disponibles de los providers de Pulsar, para despues buscar su información en FilmAffinity.[CR]Posteriormente se crearan los ficheros .strm a partir de los medias encontrados en FilmAffinity.[CR]El contenido de dichos ficheros contiene el link a Pulsar.</description>
 		<language></language>
 		<platform>all</platform>
 		<forum>http://forum.xbmc.org/showthread.php?tid=204728</forum>
 		<disclaimer lang="en">It only works with Pulsar 0.3.1![CR]It is just for educational purpose[CR]Check if it is illegal in your country to use.</disclaimer>
-		<disclaimer lang="es">It only works with Pulsar 0.3.1![CR]It is just for educational purpose[CR]Check if it is illegal in your country to use.</disclaimer>
+		<disclaimer lang="es">Esto solo funciona sobre el addon Pulsar![CR]Tiene un proposito educativo[CR]Chequea que no sea ilegal en tu Pais antes de usarlo.</disclaimer>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 	</extension>
 </addon>

@@ -6,8 +6,7 @@
     </category>--->
 	<category label="General">
 		<setting label="Movie Folder:" type="folder" id="movie_folder" source="auto" option="writeable"/>
-		<setting label="TV Show Folder:" type="folder" id="show_folder" source="auto" option="writeable"/>
-		<setting label="Language for the Search" type="lsep"/>
+		<setting label="TV Show Folder:" type="folder" id="show_folder" source="auto" option="writeable"/>		
 		<setting label="Language:" type="labelenum" id="language" values="en|de|es|fr|it|pt" default="es"/>
 		<setting label="Clear Database" type="bool" id="clear_database" default="false"/>
 		<setting label="Action" type="labelenum" id="action" values="links|play"/>
