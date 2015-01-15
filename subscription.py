@@ -6,6 +6,7 @@ import xbmc
 import xbmcgui
 import os
 
+# Called by main in filmaffinity
 class Settings:
     def __init__(self):
         self.settings = xbmcaddon.Addon()
@@ -29,6 +30,7 @@ class Settings:
             self.settings.setSetting('clear_database', 'false')
         self.dialog = xbmcgui.Dialog()
 
+# Called by main in filmaffinity		
 class Browser:
     def __init__(self):
         import cookielib
@@ -200,6 +202,7 @@ class Movie():
             self.label = name
 
 
+# Called by main in filmaffinity at least
 def integration(listing, ID, type_list, folder, silence=False):
     import shelve
 
