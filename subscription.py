@@ -99,7 +99,7 @@ def translator(imdb_id, language):
         if title == original_title:
             title += ' ' + keywords[language]
     else:
-        title = 'Pas de communication avec le themoviedb.org'
+        title = 'Communication lost with themoviedb.org'
     return title.rstrip()
 
 
