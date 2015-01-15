@@ -9,7 +9,7 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">Pulsar FilmAffinity list subscription</summary>
-		<description lang="en">This script creates .strm files from personalize list to be play for pulsar from the local library</description>		
+		<description lang="en">This script creates .strm files from personalize list to be play for pulsar from the local library</description>
 		<language></language>
 		<platform>all</platform>
 		<forum>http://forum.xbmc.org/showthread.php?tid=204728</forum>
