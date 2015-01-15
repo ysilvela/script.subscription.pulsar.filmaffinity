@@ -8,8 +8,9 @@ import subscription
 settings = subscription.Settings()
 # define the browser
 browser = subscription.Browser()
-
-if xbmcaddon.Addon().getSetting('language') == "es":
+language = xbmcaddon.Addon().getSetting('language')
+xbmc.log('[service.subscription] Language selected: ' + language)
+if language == "es":
     url_search = "http://www.filmaffinity.com/es/countcat.php?id=new_th_es"
     xbmc.log('[service.subscription] Using language selection')
 else:

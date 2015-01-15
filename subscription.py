@@ -8,6 +8,7 @@ import os
 
 class Settings:
     def __init__(self):
+        xbmc.log('[service.subscription] Setting class initialized')
         self.settings = xbmcaddon.Addon()
         self.id_addon = self.settings.getAddonInfo('id')  # gets name
         self.icon = self.settings.getAddonInfo('icon')
@@ -31,6 +32,7 @@ class Settings:
 class Browser:
     def __init__(self):
         import cookielib
+        xbmc.log('[service.subscription] Browser class initialized')
         self._cookies = None
         self.cookies = cookielib.LWPCookieJar()
         self.content = None
@@ -42,6 +44,7 @@ class Browser:
 
     def open(self,url):
         import urllib2
+        xbmc.log('[service.subscription] Browser.open method invocated')
         result = True
         if self._cookies is not None:
             req = urllib2.Request(url,self._cookies)
@@ -70,6 +73,7 @@ class Browser:
         return result
 
     def login(self, url, payload, word):
+        xbmc.log('[service.subscription] Browser.login method invocated')
         result = False
         self.create_cookies(payload)
         if self.open(url):
@@ -85,6 +89,7 @@ class Browser:
 def translator(imdb_id, language):
     import unicodedata
     import json
+    xbmc.log('[service.subscription] Browser.Translator method invocated')
     browser1 = Browser()
     keywords = {'en': '', 'de': '', 'es': 'espa', 'fr': 'french', 'it': 'italian', 'pt': 'portug'}
     url_themoviedb = "http://api.themoviedb.org/3/find/%s?api_key=8d0e4dca86c779f4157fc2c469c372ca&language=%s&external_source=imdb_id" % (imdb_id, language)
@@ -162,7 +167,7 @@ class Movie():
     def __init__(self, name):
         import json
         import urllib
-
+        xbmc.log('[service.subscription] Movie class initialized')
         if ')' in name and '(' in name:
             try:
                 year_movie = int(name[name.find("(")+1:name.find(")")])
@@ -201,13 +206,17 @@ class Movie():
 
 def integration(listing, ID, type_list, folder, silence=False):
     import shelve
-
+    xbmc.log('[service.subscription] Integration method invocated')
     dialog = xbmcgui.Dialog()
     action = xbmcaddon.Addon().getSetting('action')  # gets action
     total = len(listing)
+    newlisting = ''
+    for cm, item in enumerate(listing):
+        newlisting = newlisting + item + '[CR]'
+    
     if total > 0:
         if not silence:
-            answer = dialog.yesno('Pulsar list integration: %s items\nDo you want to subscribe this list?' % total, '%s' % listing)
+            answer = dialog.yesno('Pulsar list integration: %s items\nDo you want to subscribe this list?' % total, '%s' % newlisting)
         else:
             answer = True
         if answer:
@@ -218,7 +227,8 @@ def integration(listing, ID, type_list, folder, silence=False):
             cont = 0
             directory = ''
             for cm, item in enumerate(listing):
-                item = ' '.join(item.split()).replace(':', '').replace('/', '-')
+                item = ' '.join(item.split()).replace(':', '').replace('/', '-').replace('\\xc2','').replace('?','')
+                xbmc.log('[service.subscription]Elemento extraido : ' + item)
                 if database.has_key(item):
                     data = database[item]
                 else:
@@ -271,6 +281,7 @@ def integration(listing, ID, type_list, folder, silence=False):
                     if not silence: pDialog.update(int(float(cm) / total * 100), 'Creating %s%s.strm...' % (directory, item))
                     xbmc.log('%s%s.strm added' % (directory, item), xbmc.LOGINFO)
                 # update database
+                data['path'] = directory + item
                 database[item] = data
                 database.sync()
                 if not silence:

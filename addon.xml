@@ -10,12 +10,9 @@
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">Pulsar FilmAffinity list subscription</summary>
 		<description lang="en">This script creates .strm files from personalize list to be play for pulsar from the local library</description>
-<<<<<<< HEAD
 		<description lang="es">Este script crea los archivos .strm desde una lista personalizada para ser vistos por Pulsar desde la libraria local a partir de FilmAffinity.[CR]La idea de este addon es principalmente cargar las peliculas disponibles de los providers de Pulsar, para despues buscar su información en FilmAffinity.[CR]Posteriormente se crearan los ficheros .strm a partir de los medias encontrados en FilmAffinity.[CR]El contenido de dichos ficheros contiene el link a Pulsar.</description>
-=======
 		<summary lang="es">Lista de subscripcion a FilmAffinity para Pulsar</summary>
 		<description lang="es">Este script crea los archivos .strm desde una lista personalizada para ser vistos por Pulsar desde la libraria local a partir de FilmAffinity.</description>
->>>>>>> origin/master
 		<language></language>
 		<platform>all</platform>
 		<forum>http://forum.xbmc.org/showthread.php?tid=204728</forum>
